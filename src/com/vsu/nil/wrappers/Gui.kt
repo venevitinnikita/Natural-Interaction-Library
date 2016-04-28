@@ -1,12 +1,10 @@
 /**
- * Created by nikita on 25.04.16.
+ * Created by venevitinnikita@gmail.com on 25.04.16.
  */
 package com.vsu.nil.wrappers
 
 import java.awt.Component
 import java.awt.Container
-import java.awt.event.WindowAdapter
-import java.awt.event.WindowEvent
 import javax.swing.JButton
 import javax.swing.JFrame
 import javax.swing.JLabel
@@ -36,12 +34,4 @@ val MAXIMIZED_BOTH = JFrame.MAXIMIZED_BOTH
 
 infix fun Component.to(container: Container) {
     container.add(this)
-}
-
-infix fun JFrame.onClose(func: () -> Unit) {
-    addWindowListener(object : WindowAdapter() {
-        override fun windowClosing(windowEvent: WindowEvent) {
-            func()
-        }
-    })
 }

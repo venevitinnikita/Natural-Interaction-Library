@@ -1,5 +1,5 @@
 /**
- * Created by nikita on 24.04.16.
+ * Created by venevitinnikita@gmail.com on 24.04.16.
  */
 package com.vsu.nil
 
@@ -35,5 +35,9 @@ fun main(args: Array<String>) {
             } to this
         } to this
         status to this
-    } onClose { System.exit(0) }
+
+        events {
+            onClosing = { System.exit(0) }
+        }
+    }
 }
