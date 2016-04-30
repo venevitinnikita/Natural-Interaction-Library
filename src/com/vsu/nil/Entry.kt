@@ -3,13 +3,15 @@
  */
 package com.vsu.nil
 
+import com.vsu.nil.widgets.touchPanel
 import com.vsu.nil.wrappers.*
+import java.awt.Color
 import java.awt.FlowLayout
 import java.awt.GridLayout
 
 fun main(args: Array<String>) {
     window {
-        layout = GridLayout(3, 1)
+        layout = GridLayout(4, 1)
         extendedState = MAXIMIZED_BOTH
 
         label {
@@ -35,6 +37,14 @@ fun main(args: Array<String>) {
             } to this
         } to this
         status to this
+
+        touchPanel {
+            // TODO первый раз размер не выставляется
+            normalWidth = 100
+            normalHeight = 100
+
+            normalColor = Color.PINK
+        } to this
 
         events {
             onClosing = { System.exit(0) }

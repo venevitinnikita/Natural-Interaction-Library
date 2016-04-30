@@ -32,6 +32,7 @@ fun <C : Component> Container.addChild(child: C, func: C.() -> Unit = {}): C {
 val CENTER = JLabel.CENTER
 val MAXIMIZED_BOTH = JFrame.MAXIMIZED_BOTH
 
-infix fun Component.to(container: Container) {
+infix fun <C : Component> C.to(container: Container): C {
     container.add(this)
+    return this
 }
