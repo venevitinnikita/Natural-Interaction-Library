@@ -4,22 +4,63 @@
 package com.vsu.nil.widgets
 
 import com.vsu.nil.wrappers.addChild
+import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 import java.awt.event.MouseMotionListener
+import java.util.*
 import javax.swing.JFrame
 import javax.swing.JPanel
+import javax.swing.border.LineBorder
 
 
 fun JFrame.touchPanel(func: TouchPanel.() -> Unit = {}) = addChild(TouchPanel(), func)
 
+fun TouchPanel.content(func: TouchContent.() -> Unit = {}): TouchContent {
+    val child = TouchContent()
+    touchableChildren.add(child)
+    child.parentNormalSize = normalSize
+    child.parentActivatedSize = activatedSize
+    child.func()
+
+    add(child, BorderLayout.CENTER)
+
+    return child
+}
+
+interface Touchable {
+    var activated: Boolean
+}
+
+interface TouchableContainer : Touchable {
+    val touchableChildren: MutableList<TouchableContent>
+    var normalSize: Dimension
+    var activatedSize: Dimension
+}
+
+interface TouchableContent : Touchable {
+    var parentNormalSize: Dimension
+    var parentActivatedSize: Dimension
+}
+
+class TouchContent : JPanel(), TouchableContent {
+    override var activated: Boolean = false
+        set(value) {
+            size = if (value) parentActivatedSize else parentNormalSize
+            field = value
+        }
+    override var parentActivatedSize: Dimension = Dimension()
+    override var parentNormalSize: Dimension = Dimension()
+}
 
 const val INITIAL_WIDTH = 100
 const val INITIAL_HEIGHT = 100
 
-class TouchPanel : JPanel {
+class TouchPanel : JPanel, TouchableContainer {
+    override val touchableChildren = ArrayList<TouchableContent>()
+
     var normalWidth = INITIAL_WIDTH
         set(value) {
             field = value
@@ -32,7 +73,7 @@ class TouchPanel : JPanel {
             normalSize.height = value
             if (!activated) size = normalSize
         }
-    private var normalSize = Dimension(normalWidth, normalHeight)
+    override var normalSize = Dimension(normalWidth, normalHeight)
 
     var activatedWidth = (normalWidth * 1.5).toInt()
         set(value) {
@@ -46,20 +87,11 @@ class TouchPanel : JPanel {
             activatedSize.height = value
             if (activated) size = activatedSize
         }
-    private var activatedSize = Dimension(activatedWidth, activatedHeight)
+    override var activatedSize = Dimension(activatedWidth, activatedHeight)
 
-    var normalColor = Color.GRAY
-        set(value) {
-            field = value
-            if (!activated) background = normalColor
-        }
-    var activatedColor = Color.GREEN
-        set(value) {
-            field = value
-            if (activated) background = activatedColor
-        }
+    var borderColor = Color.GREEN
 
-    constructor() : super() {
+    constructor() : super(BorderLayout()) {
         addMouseMotionListener(object : MouseMotionListener {
             override fun mouseMoved(e: MouseEvent?) {
                 activated = true
@@ -87,16 +119,17 @@ class TouchPanel : JPanel {
         })
     }
 
-    var activated: Boolean = false
+    override var activated: Boolean = false
         set(value) {
             if (value xor field) {
-                background = if (value) {
+                border = if (value) {
                     size = activatedSize
-                    activatedColor
+                    LineBorder(borderColor, 3)
                 } else {
                     size = normalSize
-                    normalColor
+                    null
                 }
+                touchableChildren.forEach { it.activated = value }
                 field = value
             }
         }

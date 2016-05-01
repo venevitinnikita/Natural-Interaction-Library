@@ -3,6 +3,7 @@
  */
 package com.vsu.nil
 
+import com.vsu.nil.widgets.content
 import com.vsu.nil.widgets.touchPanel
 import com.vsu.nil.wrappers.*
 import java.awt.Color
@@ -38,12 +39,17 @@ fun main(args: Array<String>) {
         } to this
         status to this
 
-        touchPanel {
-            // TODO первый раз размер не выставляется
-            normalWidth = 100
-            normalHeight = 100
+        panel {
+            layout = null
 
-            normalColor = Color.PINK
+            touchPanel {
+                normalWidth = 100
+                normalHeight = 100
+
+                content {
+                    background = Color.BLACK
+                }
+            } to this
         } to this
 
         events {
