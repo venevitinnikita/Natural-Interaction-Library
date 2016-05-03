@@ -3,10 +3,12 @@
  */
 package com.vsu.nil.widgets
 
+import com.vsu.nil.kinect.trackPanel
 import com.vsu.nil.wrappers.addChild
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Dimension
+import java.awt.Point
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 import java.awt.event.MouseMotionListener
@@ -16,7 +18,11 @@ import javax.swing.JPanel
 import javax.swing.border.LineBorder
 
 
-fun JFrame.touchPanel(func: TouchPanel.() -> Unit = {}) = addChild(TouchPanel(), func)
+fun JFrame.touchPanel(func: TouchPanel.() -> Unit = {}): TouchPanel {
+    val panel = TouchPanel()
+    trackPanel(panel)
+    return addChild(panel, func)
+}
 
 fun TouchPanel.content(func: TouchContent.() -> Unit = {}): TouchContent {
     val child = TouchContent()
@@ -38,6 +44,8 @@ interface TouchableContainer : Touchable {
     val touchableChildren: MutableList<TouchableContent>
     var normalSize: Dimension
     var activatedSize: Dimension
+
+    fun isTouched(point: Point): Boolean
 }
 
 interface TouchableContent : Touchable {
@@ -133,4 +141,17 @@ class TouchPanel : JPanel, TouchableContainer {
                 field = value
             }
         }
+
+    override fun isTouched(point: Point): Boolean {
+        val width: Int
+        val height: Int
+        if (activated) {
+            width = activatedWidth
+            height = activatedHeight
+        } else {
+            width = normalWidth
+            height = normalHeight
+        }
+        return x <= point.x && point.x <= x + width && y <= point.y && point.y <= y + height
+    }
 }
