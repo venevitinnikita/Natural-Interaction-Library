@@ -35,9 +35,11 @@ class HandTracker {
                         timer(initialDelay = 250, period = 250) {
                             val newPos = position
                             pos?.let {
-                                count++
                                 if (panel.isTouched(pos)) cancel()
-                                if (count++ >= 2) panel.activated = false
+                                if (count++ >= 2) {
+                                    panel.activated = false
+                                    cancel()
+                                }
                             } ?: cancel()
                         }
                     }
@@ -47,9 +49,11 @@ class HandTracker {
                         timer(initialDelay = 250, period = 250) {
                             val newPos = position
                             pos?.let {
-                                count++
                                 if (!panel.isTouched(pos)) cancel()
-                                if (count++ >= 2) panel.activated = true
+                                if (count++ >= 2) {
+                                    panel.activated = true
+                                    cancel()
+                                }
                             } ?: cancel()
                         }
                     }

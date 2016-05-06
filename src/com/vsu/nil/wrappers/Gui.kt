@@ -11,21 +11,19 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 
 
-fun window(func: JFrame.() -> Unit = {}): JFrame {
+fun window(func: JFrame.(JFrame) -> Unit = {}): JFrame {
     val window = JFrame()
-    window.func()
+    window.func(window)
     window.setVisible(true)
     return window
 }
 
-fun JFrame.panel(func: JPanel.() -> Unit = {}) = addChild(JPanel(), func)
-fun JFrame.label(func: JLabel.() -> Unit = {}) = addChild(JLabel(), func)
+fun panel(func: JPanel.(JPanel) -> Unit = {}) = addChild(JPanel(), func)
+fun label(func: JLabel.(JLabel) -> Unit = {}) = addChild(JLabel(), func)
+fun button(func: JButton.(JButton) -> Unit = {}) = addChild(JButton(), func)
 
-fun JPanel.label(func: JLabel.() -> Unit = {}) = addChild(JLabel(), func)
-fun JPanel.button(func: JButton.() -> Unit = {}) = addChild(JButton(), func)
-
-fun <C : Component> Container.addChild(child: C, func: C.() -> Unit = {}): C {
-    child.func()
+fun <C : Component> addChild(child: C, func: C.(C) -> Unit = {}): C {
+    child.func(child)
     return child
 }
 

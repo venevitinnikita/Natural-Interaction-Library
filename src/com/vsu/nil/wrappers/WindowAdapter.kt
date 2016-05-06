@@ -11,7 +11,7 @@ import java.util.*
 import javax.swing.JFrame
 
 
-private val windowAdapters = HashMap<JFrame, WindowAdapter>()
+private val windowAdapters by lazy { HashMap<JFrame, WindowAdapter>() }
 
 val JFrame.events: WindowAdapter
     get() {
