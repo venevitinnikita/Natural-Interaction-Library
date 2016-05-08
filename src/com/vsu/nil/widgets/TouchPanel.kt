@@ -3,63 +3,41 @@
  */
 package com.vsu.nil.widgets
 
+import com.vsu.nil.kinect.trackPanel
+import com.vsu.nil.wrappers.KMouseAdapter
 import com.vsu.nil.wrappers.addChild
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Dimension
-import java.awt.event.MouseEvent
-import java.awt.event.MouseListener
-import java.awt.event.MouseMotionListener
+import java.awt.Point
 import java.util.*
-import javax.swing.JFrame
+import javax.swing.JComponent
 import javax.swing.JPanel
 import javax.swing.border.LineBorder
 
 
-fun JFrame.touchPanel(func: TouchPanel.() -> Unit = {}) = addChild(TouchPanel(), func)
+fun touchPanel(func: TouchPanel.(TouchPanel) -> Unit = {}): TouchPanel {
+    val panel = TouchPanel()
+    trackPanel(panel)
+    return addChild(panel, func)
+}
 
-fun TouchPanel.content(func: TouchContent.() -> Unit = {}): TouchContent {
-    val child = TouchContent()
+fun <T> TouchPanel.addTouchableChild(child: T, func: T.() -> Unit): T
+        where T : JComponent, T : TouchableContent {
     touchableChildren.add(child)
     child.parentNormalSize = normalSize
     child.parentActivatedSize = activatedSize
     child.func()
 
-    add(child, BorderLayout.CENTER)
-
     return child
-}
-
-interface Touchable {
-    var activated: Boolean
-}
-
-interface TouchableContainer : Touchable {
-    val touchableChildren: MutableList<TouchableContent>
-    var normalSize: Dimension
-    var activatedSize: Dimension
-}
-
-interface TouchableContent : Touchable {
-    var parentNormalSize: Dimension
-    var parentActivatedSize: Dimension
-}
-
-class TouchContent : JPanel(), TouchableContent {
-    override var activated: Boolean = false
-        set(value) {
-            size = if (value) parentActivatedSize else parentNormalSize
-            field = value
-        }
-    override var parentActivatedSize: Dimension = Dimension()
-    override var parentNormalSize: Dimension = Dimension()
 }
 
 const val INITIAL_WIDTH = 100
 const val INITIAL_HEIGHT = 100
 
 class TouchPanel : JPanel, TouchableContainer {
-    override val touchableChildren = ArrayList<TouchableContent>()
+    override val touchableChildren by lazy { ArrayList<TouchableContent>() }
+    val events = KMouseAdapter()
 
     var normalWidth = INITIAL_WIDTH
         set(value) {
@@ -91,34 +69,6 @@ class TouchPanel : JPanel, TouchableContainer {
 
     var borderColor = Color.GREEN
 
-    constructor() : super(BorderLayout()) {
-        addMouseMotionListener(object : MouseMotionListener {
-            override fun mouseMoved(e: MouseEvent?) {
-                activated = true
-            }
-
-            override fun mouseDragged(e: MouseEvent?) {
-            }
-        })
-        addMouseListener(object : MouseListener {
-            override fun mouseExited(e: MouseEvent?) {
-                activated = false
-            }
-
-            override fun mouseClicked(e: MouseEvent?) {
-            }
-
-            override fun mouseEntered(e: MouseEvent?) {
-            }
-
-            override fun mousePressed(e: MouseEvent?) {
-            }
-
-            override fun mouseReleased(e: MouseEvent?) {
-            }
-        })
-    }
-
     override var activated: Boolean = false
         set(value) {
             if (value xor field) {
@@ -133,4 +83,40 @@ class TouchPanel : JPanel, TouchableContainer {
                 field = value
             }
         }
+
+    constructor() : super(BorderLayout()) {
+        addMouseListener(events)
+        addMouseMotionListener(events)
+    }
+
+    override fun isTouched(point: Point): Boolean {
+        val width: Int
+        val height: Int
+        if (activated) {
+            width = activatedWidth
+            height = activatedHeight
+        } else {
+            width = normalWidth
+            height = normalHeight
+        }
+        return x <= point.x && point.x <= x + width && y <= point.y && point.y <= y + height
+    }
+}
+
+
+// TODO возможно это уже не понадобится
+fun TouchPanel.content(func: TouchContent.() -> Unit = {}) {
+    val child = TouchContent()
+    addTouchableChild(child, func)
+    add(child)
+}
+
+class TouchContent : JPanel(), TouchableContent {
+    override var activated: Boolean = false
+        set(value) {
+            size = if (value) parentActivatedSize else parentNormalSize
+            field = value
+        }
+    override var parentActivatedSize = Dimension()
+    override var parentNormalSize = Dimension()
 }

@@ -3,12 +3,13 @@
  */
 package com.vsu.nil
 
-import com.vsu.nil.widgets.content
+import com.vsu.nil.widgets.button
 import com.vsu.nil.widgets.touchPanel
 import com.vsu.nil.wrappers.*
-import java.awt.Color
 import java.awt.FlowLayout
 import java.awt.GridLayout
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 
 fun main(args: Array<String>) {
     window {
@@ -42,13 +43,31 @@ fun main(args: Array<String>) {
         panel {
             layout = null
 
-            touchPanel {
+            touchPanel { touchPanel ->
                 normalWidth = 100
                 normalHeight = 100
 
-                content {
-                    background = Color.BLACK
+                events {
+                    onMouseMoved = { activated = true }
+                    onMouseExited = { activated = false }
                 }
+
+                val button = button { } to this
+                val mouseAdapter = object : MouseAdapter() {
+                    override fun mouseClicked(e: MouseEvent?) {
+                        button.click()
+                    }
+
+                    override fun mouseMoved(e: MouseEvent?) {
+                        touchPanel.dispatchEvent(e)
+                    }
+
+                    override fun mouseExited(e: MouseEvent?) {
+                        touchPanel.dispatchEvent(e)
+                    }
+                }
+                button.addMouseListener(mouseAdapter)
+                button.addMouseMotionListener(mouseAdapter)
             } to this
         } to this
 
