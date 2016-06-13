@@ -20,8 +20,8 @@ import javax.swing.*
 }
 fun niWindow(func: JFrame.(JFrame) -> Unit = {}): JFrame {
     val niWindow = gController.niFrame
-    niWindow.func(niWindow)
     niWindow.setSize(800, 600)
+    niWindow.func(niWindow)
     niWindow.setVisible(true)
     return niWindow
 }
