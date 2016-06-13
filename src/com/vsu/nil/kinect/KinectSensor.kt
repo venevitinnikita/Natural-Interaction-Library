@@ -1,10 +1,10 @@
 package com.vsu.nil.kinect
 
 import com.primesense.NITE.SessionManager
-import org.OpenNI.Context
-import org.OpenNI.GestureGenerator
-import org.OpenNI.HandsGenerator
-import org.OpenNI.StatusException
+import org.openni.Context
+import org.openni.GestureGenerator
+import org.openni.HandsGenerator
+import org.openni.StatusException
 
 /**
  * Created by Thor on 02.05.2016.

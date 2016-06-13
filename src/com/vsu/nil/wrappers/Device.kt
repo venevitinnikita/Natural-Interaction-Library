@@ -3,8 +3,8 @@ package com.vsu.nil.wrappers
 import com.primesense.NITE.HandEventArgs
 import com.vsu.nil.kinect.observers.HandObserver
 import com.vsu.nil.widgets.NIFrame
-import org.OpenNI.EventArgs
-import org.OpenNI.IObserver
+import org.openni.EventArgs
+import org.openni.IObserver
 import java.awt.event.WindowListener
 
 /**

@@ -103,15 +103,8 @@ class TouchPanel : JPanel, TouchableContainer {
     }
 }
 
-
-// TODO возможно это уже не понадобится
-fun TouchPanel.content(func: TouchContent.() -> Unit = {}) {
-    val child = TouchContent()
-    addTouchableChild(child, func)
-    add(child)
-}
-
 class TouchContent : JPanel(), TouchableContent {
+
     override var activated: Boolean = false
         set(value) {
             size = if (value) parentActivatedSize else parentNormalSize
@@ -119,4 +112,11 @@ class TouchContent : JPanel(), TouchableContent {
         }
     override var parentActivatedSize = Dimension()
     override var parentNormalSize = Dimension()
+}
+
+// TODO возможно это уже не понадобится
+fun TouchPanel.content(func: TouchContent.() -> Unit = {}) {
+    val child = TouchContent()
+    addTouchableChild(child, func)
+    add(child)
 }

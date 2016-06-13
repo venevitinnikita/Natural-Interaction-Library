@@ -1,9 +1,10 @@
 package com.vsu.nil.kinect
 
-import com.primesense.NITE.*
+import com.primesense.NITE.NullEventArgs
+import com.primesense.NITE.PointControl
+import com.primesense.NITE.PointEventArgs
+import com.primesense.NITE.SessionManager
 import com.vsu.nil.kinect.observers.*
-import org.OpenNI.IObservable
-import org.OpenNI.IObserver
 
 /**
  * Created by Thor on 02.05.2016.

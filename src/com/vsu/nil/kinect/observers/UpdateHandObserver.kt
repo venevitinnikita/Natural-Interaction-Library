@@ -2,10 +2,9 @@ package com.vsu.nil.kinect.observers
 
 import com.primesense.NITE.HandEventArgs
 import com.primesense.NITE.HandPointContext
-import com.vsu.nil.kinect.GestureController
 import com.vsu.nil.kinect.TrackingStatus
 import com.vsu.nil.kinect.gController
-import org.OpenNI.IObservable
+import org.openni.IObservable
 
 /**
  * Created by Thor on 05.06.2016.

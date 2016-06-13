@@ -10,11 +10,11 @@ import java.awt.Container
 import javax.swing.*
 
 
-fun window(func: JFrame.(JFrame) -> Unit = {}): JFrame {
+@JvmOverloads fun window(func: JFrame.(JFrame) -> Unit = {}): JFrame {
     val window = JFrame()
     window.addWindowListener(KinectWindowListener())
-    window.func(window)
     window.setSize(800, 600)
+    window.func(window)
     window.setVisible(true)
     return window
 }
@@ -26,11 +26,11 @@ fun niWindow(func: JFrame.(JFrame) -> Unit = {}): JFrame {
     return niWindow
 }
 
+@JvmOverloads fun panel(func: JPanel.(JPanel) -> Unit = {}) = addChild(JPanel(), func)
+@JvmOverloads fun label(func: JLabel.(JLabel) -> Unit = {}) = addChild(JLabel(), func)
+@JvmOverloads fun button(func: JButton.(JButton) -> Unit = {}) = addChild(JButton(), func)
 //fun handPanel(func: JPanel.(JPanel) -> Unit = {}) = addChild(gController.handPanel, func)
-fun panel(func: JPanel.(JPanel) -> Unit = {}) = addChild(JPanel(), func)
 fun component(func: JComponent.(JComponent) -> Unit = {}) = addChild(object: JComponent(){}, func)
-fun label(func: JLabel.(JLabel) -> Unit = {}) = addChild(JLabel(), func)
-fun button(func: JButton.(JButton) -> Unit = {}) = addChild(JButton(), func)
 
 fun <C : Component> addChild(child: C, func: C.(C) -> Unit = {}): C {
     child.func(child)

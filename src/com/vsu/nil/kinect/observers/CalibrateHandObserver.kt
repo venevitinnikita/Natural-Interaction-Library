@@ -3,8 +3,8 @@ package com.vsu.nil.kinect.observers
 import com.primesense.NITE.HandEventArgs
 import com.vsu.nil.kinect.TrackingStatus
 import com.vsu.nil.kinect.gController
-import org.OpenNI.IObservable
-import org.OpenNI.Point3D
+import org.openni.IObservable
+import org.openni.Point3D
 import java.lang.Math.*
 
 /**

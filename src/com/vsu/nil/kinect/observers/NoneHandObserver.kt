@@ -1,8 +1,7 @@
 package com.vsu.nil.kinect.observers
 
 import com.primesense.NITE.NullEventArgs
-import com.vsu.nil.kinect.GestureController
-import org.OpenNI.IObservable
+import org.openni.IObservable
 
 /**
  * Created by Thor on 05.06.2016.
