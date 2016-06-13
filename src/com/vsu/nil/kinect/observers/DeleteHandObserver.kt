@@ -2,7 +2,7 @@ package com.vsu.nil.kinect.observers
 
 import com.primesense.NITE.IdEventArgs
 import com.vsu.nil.kinect.gController
-import org.openni.IObservable
+import org.OpenNI.IObservable
 
 /**
  * Created by Thor on 05.06.2016.

@@ -1,7 +1,7 @@
 package com.vsu.nil.kinect.observers
 
-import org.openni.EventArgs
-import org.openni.IObserver
+import org.OpenNI.EventArgs
+import org.OpenNI.IObserver
 
 /**
  * Created by Thor on 03.05.2016.

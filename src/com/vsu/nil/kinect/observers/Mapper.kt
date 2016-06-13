@@ -1,6 +1,6 @@
 package com.vsu.nil.kinect.observers
 
-import org.openni.Point3D
+import org.OpenNI.Point3D
 
 /**
  * Created by Thor on 05.06.2016.

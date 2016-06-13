@@ -2,9 +2,9 @@ package com.vsu.nil.kinect.observers
 
 import com.primesense.NITE.NullEventArgs
 import com.primesense.NITE.PointEventArgs
-import org.openni.EventArgs
-import org.openni.IObservable
-import org.openni.IObserver
+import org.OpenNI.EventArgs
+import org.OpenNI.IObservable
+import org.OpenNI.IObserver
 
 /**
  * Created by Thor on 07.05.2016.
