@@ -1,4 +1,4 @@
-package com.vsu.nil.kinect
+package com.vsu.nil.kinect.observers
 
 import com.primesense.NITE.NullEventArgs
 import com.primesense.NITE.PointEventArgs

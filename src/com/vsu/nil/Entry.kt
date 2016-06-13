@@ -12,62 +12,64 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 
 fun main(args: Array<String>) {
-    window {
-        layout = GridLayout(4, 1)
-        extendedState = MAXIMIZED_BOTH
-
-        label {
-            text = "Buttons"
-            horizontalAlignment = CENTER
-        } to this
-        val status = label {
-            horizontalAlignment = CENTER
-        }
+    niWindow {
         panel {
-            layout = FlowLayout()
-            button {
-                text = "One"
-                addActionListener { status.text = text }
+            layout = GridLayout(4, 1)
+            extendedState = MAXIMIZED_BOTH
+
+            label {
+                text = "Buttons"
+                horizontalAlignment = CENTER
             } to this
-            button {
-                text = "Two"
-                addActionListener { status.text = text }
+            val status = label {
+                horizontalAlignment = CENTER
+            }
+            panel {
+                layout = FlowLayout()
+                button {
+                    text = "One"
+                    addActionListener { status.text = text }
+                } to this
+                button {
+                    text = "Two"
+                    addActionListener { status.text = text }
+                } to this
+                button {
+                    text = "Three"
+                    addActionListener { status.text = text }
+                } to this
             } to this
-            button {
-                text = "Three"
-                addActionListener { status.text = text }
-            } to this
-        } to this
-        status to this
+            status to this
 
-        panel {
-            layout = null
+            panel {
+                layout = null
 
-            touchPanel { touchPanel ->
-                normalWidth = 100
-                normalHeight = 100
+                touchPanel { touchPanel ->
+                    normalWidth = 100
+                    normalHeight = 100
 
-                events {
-                    onMouseMoved = { activated = true }
-                    onMouseExited = { activated = false }
-                }
-
-                val button = button { } to this
-                val mouseAdapter = object : MouseAdapter() {
-                    override fun mouseClicked(e: MouseEvent?) {
-                        button.click()
+                    events {
+                        onMouseMoved = { activated = true }
+                        onMouseExited = { activated = false }
                     }
 
-                    override fun mouseMoved(e: MouseEvent?) {
-                        touchPanel.dispatchEvent(e)
-                    }
+                    val button = button { } to this
+                    val mouseAdapter = object : MouseAdapter() {
+                        override fun mouseClicked(e: MouseEvent?) {
+                            button.click()
+                        }
 
-                    override fun mouseExited(e: MouseEvent?) {
-                        touchPanel.dispatchEvent(e)
+                        override fun mouseMoved(e: MouseEvent?) {
+                            touchPanel.dispatchEvent(e)
+                        }
+
+                        override fun mouseExited(e: MouseEvent?) {
+                            touchPanel.dispatchEvent(e)
+                        }
                     }
-                }
-                button.addMouseListener(mouseAdapter)
-                button.addMouseMotionListener(mouseAdapter)
+                    button.addMouseListener(mouseAdapter)
+                    button.addMouseMotionListener(mouseAdapter)
+                } to this
             } to this
         } to this
 

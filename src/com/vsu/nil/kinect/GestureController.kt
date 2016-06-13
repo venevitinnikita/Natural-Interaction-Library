@@ -1,13 +1,7 @@
 package com.vsu.nil.kinect
 
-import com.primesense.NITE.HandEventArgs
 import com.primesense.NITE.HandPointContext
-import com.primesense.NITE.IdEventArgs
-import com.primesense.NITE.NullEventArgs
-import com.vsu.nil.widgets.HandPanel
-import org.OpenNI.EventArgs
-import java.awt.Point
-import java.util.*
+import com.vsu.nil.widgets.NIFrame
 
 /**
  * Created by Thor on 04.05.2016.
@@ -16,16 +10,30 @@ import java.util.*
 val gController = object: GestureController() {}
 
 abstract class GestureController {
-//    private var hands: Set<Point>
-    val handPanel = HandPanel()
+    var status = TrackingStatus.OFF
+    val niFrame = NIFrame()
     val kinectSensor = KinectSensor(this)
 
     fun updateHand(hand: HandPointContext) {
-        handPanel.updateHand(hand)
+        niFrame.updateHand(hand)
 //        handPanel.repaint()
     }
+
     fun deleteHand(id: Int) {
-        handPanel.deleteHand(id)
+        niFrame.deleteHand(id)
 //        handPanel.repaint()
     }
+
+    fun startCalibration(time: Int) {
+        status = TrackingStatus.CALIBRATION
+        for (t in time..1) {
+            niFrame.calibration(t)
+            Thread.sleep(1000)
+        }
+        status = TrackingStatus.TRACKING
+    }
+}
+
+enum class TrackingStatus {
+    OFF, NO_USER, CALIBRATION, TRACKING;
 }

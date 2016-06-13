@@ -3,22 +3,32 @@
  */
 package com.vsu.nil.wrappers
 
+import com.vsu.nil.kinect.KinectWindowListener
+import com.vsu.nil.kinect.gController
 import java.awt.Component
 import java.awt.Container
-import javax.swing.JButton
-import javax.swing.JFrame
-import javax.swing.JLabel
-import javax.swing.JPanel
+import javax.swing.*
 
 
 fun window(func: JFrame.(JFrame) -> Unit = {}): JFrame {
     val window = JFrame()
+    window.addWindowListener(KinectWindowListener())
     window.func(window)
+    window.setSize(800, 600)
     window.setVisible(true)
     return window
 }
+fun niWindow(func: JFrame.(JFrame) -> Unit = {}): JFrame {
+    val niWindow = gController.niFrame
+    niWindow.func(niWindow)
+    niWindow.setSize(800, 600)
+    niWindow.setVisible(true)
+    return niWindow
+}
 
+//fun handPanel(func: JPanel.(JPanel) -> Unit = {}) = addChild(gController.handPanel, func)
 fun panel(func: JPanel.(JPanel) -> Unit = {}) = addChild(JPanel(), func)
+fun component(func: JComponent.(JComponent) -> Unit = {}) = addChild(object: JComponent(){}, func)
 fun label(func: JLabel.(JLabel) -> Unit = {}) = addChild(JLabel(), func)
 fun button(func: JButton.(JButton) -> Unit = {}) = addChild(JButton(), func)
 

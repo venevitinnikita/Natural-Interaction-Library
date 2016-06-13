@@ -9,6 +9,7 @@ import java.awt.event.WindowEvent
 
 class KinectWindowListener: WindowAdapter() {
     override fun windowClosing(event: WindowEvent) {
-        gController.kinectSensor.stop()
+        if (gController.status != TrackingStatus.OFF)
+            gController.kinectSensor.stop()
     }
 }

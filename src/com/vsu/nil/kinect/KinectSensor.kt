@@ -4,47 +4,59 @@ import com.primesense.NITE.SessionManager
 import org.OpenNI.Context
 import org.OpenNI.GestureGenerator
 import org.OpenNI.HandsGenerator
+import org.OpenNI.StatusException
 
 /**
  * Created by Thor on 02.05.2016.
  */
 
 class KinectSensor(gController: GestureController): Runnable {
-    val context: Context
-    val sessionManager: SessionManager
-    private var isRunning = true
+    val context: Context?
+    val sessionManager: SessionManager?
 
     init {
-        context = Context()
-        println("Kinect context initialized")
+        try {
+            context = Context()
+            context.globalMirror = true
+            println("Kinect context initialized")
 
-        val hands = HandsGenerator.create(context);
-        hands.SetSmoothing(0.1f);
-        println("Hands generator initialized")
+            val hands = HandsGenerator.create(context);
+            hands.SetSmoothing(0.1f);
+            println("Hands generator initialized")
 
-        GestureGenerator.create(context)
-        println("Gesture generator initialized")
+            GestureGenerator.create(context)
+            println("Gesture generator initialized")
 
-        context.startGeneratingAll()
-        println("Started generating all...")
+            context.startGeneratingAll()
+            println("Started generating all...")
 
-        sessionManager = SessionManager(context, "Click,Wave", "RaiseHand")
-        sessionManager.setSessionEvents()
-        sessionManager.addNITEListener { initPointControl(gController) }
-        println("Session manager initialized")
+            sessionManager = SessionManager(context, "Click,Wave", "RaiseHand")
+            sessionManager.setSessionEvents()
+            sessionManager.addNITEListener { initPointControl(gController) }
+            println("Session manager initialized")
 
-        Thread(this).start()
+            gController.status = TrackingStatus.NO_USER
+            Thread(this).start()
+        } catch (ex: StatusException) {
+            println(ex)
+            ex.printStackTrace()
+            println("Kinect wasn't initialized properly")
+            println("Working in simple mode without Kinect...")
+            gController.status = TrackingStatus.OFF
+            context = null
+            sessionManager = null
+        }
     }
 
     override fun run() {
         println("Started running refreshing loop...")
-        while (isRunning) {
-            context.waitAndUpdateAll()
-            sessionManager.update(context)
+        while (gController.status != TrackingStatus.OFF) {
+            context?.waitAndUpdateAll()
+            sessionManager?.update(context)
         }
     }
     fun stop() {
         println("Stopping kinect...")
-        isRunning = false
+        gController.status = TrackingStatus.OFF
     }
 }
